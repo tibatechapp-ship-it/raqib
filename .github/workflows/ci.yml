@@ -15,16 +15,13 @@ jobs:
         with: { python-version: "3.11" }
       - name: Install
         run: |
-          if [ -f pyproject.toml ] || [ -f setup.py ] || [ -f requirements.txt ]; then
-            python -m pip install -U pip
-            pip install ruff pytest
-            [ -f pyproject.toml ] && pip install -e . || true
-            [ -f requirements.txt ] && pip install -r requirements.txt || true
-          else
-            echo "no python project files - skip install"
-          fi
+          python -m pip install -U pip
+          # Pin ruff: unpinned "latest" drifts and flags rules the committed
+          # code (and local runs) do not agree on.
+          pip install "ruff==0.17.3" pytest
+          pip install -r requirements.txt
       - name: Lint
-        run: if [ -f pyproject.toml ] || [ -f setup.py ]; then ruff check . || true; else echo "skip lint"; fi
+        run: ruff check .
       - name: Test
         run: |
           if ls tests/ 2>/dev/null | grep -q . || ls test/ 2>/dev/null | grep -q .; then

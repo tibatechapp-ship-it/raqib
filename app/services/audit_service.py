@@ -117,7 +117,7 @@ def _sanitize(metadata: dict | None) -> dict | None:
         if key.lower() in _FORBIDDEN_METADATA_KEYS:
             continue
         # Only allow JSON-safe scalars; drop nested structures.
-        if isinstance(value, (str, int, float, bool)) or value is None:
+        if isinstance(value, str | int | float | bool) or value is None:
             clean[key[:50]] = value
 
     return clean or None
