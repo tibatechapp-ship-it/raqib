@@ -35,3 +35,40 @@ jobs:
       - name: Secrets
         uses: gitleaks/gitleaks-action@v2
         continue-on-error: true
+
+  # Browser tests live in their own job: they need Playwright plus a live
+  # server, and the unit job's --ignore flags used to leave them never running.
+  e2e:
+    runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis:7-alpine
+        ports: ["6379:6379"]
+    env:
+      E2E_BASE_URL: http://127.0.0.1:8080
+      DATABASE_URL: sqlite:///./e2e.db
+      MOCK_DATA: "true"
+      ENV: development
+      JWT_SECRET_KEY: test-secret-key-32-chars-minimum-abcdef
+      REDIS_URL: redis://localhost:6379/15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11", cache: pip }
+      - name: Install
+        run: pip install -r requirements.txt -r requirements-e2e.txt
+      - name: Install browser
+        run: python -m playwright install --with-deps chromium
+      - name: Start the app
+        run: |
+          uvicorn app.main:app --host 127.0.0.1 --port 8080 > server.log 2>&1 &
+          for i in $(seq 1 60); do
+            if curl -sf http://127.0.0.1:8080/health > /dev/null; then echo "server up"; exit 0; fi
+            sleep 1
+          done
+          echo "server failed to start"; tail -50 server.log; exit 1
+      - name: Run browser tests
+        run: pytest -v tests/e2e
+      - name: Server log on failure
+        if: failure()
+        run: tail -100 server.log
