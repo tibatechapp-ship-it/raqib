@@ -4,7 +4,8 @@
 # ============================================
 
 # --- Web framework ---
-fastapi==0.115.0
+fastapi==0.162.0  # bump أمني 2026-10-30: يجلب starlette جديد (0.38.6 فيها PYSEC-2026-248/1943/1941/2280/2281)
+starlette==1.10.0  # pin أمني صريح فوق تبعية fastapi (يغطي كل أصول PYSEC المذكورة أعلاه)
 uvicorn[standard]==0.32.0
 websockets==13.1
 python-multipart==0.0.12
@@ -22,10 +23,10 @@ psycopg[binary]==3.2.3
 bcrypt==4.2.0
 
 # --- Rate limiting ---
-slowapi==0.1.9
+slowapi==0.1.10  # bump مصاحب 2026-10-30: توافق مع starlette الجديد
 
 # --- Prometheus ---
-prometheus-fastapi-instrumentator==7.0.2
+prometheus-fastapi-instrumentator==8.1.0  # bump مصاحب 2026-10-30: 7.x يشترط starlette<1.0
 prometheus-client==0.21.0
 
 # --- YAML (runbooks) ---
