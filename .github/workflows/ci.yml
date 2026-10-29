@@ -37,7 +37,7 @@ jobs:
             echo "no tests directory yet - pass"
           fi
       - name: Secrets
-        uses: gitleaks/gitleaks-action@v2
+        uses: gitleaks/gitleaks-action@v3
         continue-on-error: true
 
   # Browser tests live in their own job: they need Playwright plus a live
