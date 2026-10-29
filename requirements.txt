@@ -8,7 +8,7 @@ fastapi==0.162.0  # bump أمني 2026-10-30: يجلب starlette جديد (0.38.
 starlette==1.10.0  # pin أمني صريح فوق تبعية fastapi (يغطي كل أصول PYSEC المذكورة أعلاه)
 uvicorn[standard]==0.32.0
 websockets==13.1
-python-multipart==0.0.12
+python-multipart==0.0.32
 
 # --- Validation & settings ---
 pydantic==2.9.2
