@@ -17,7 +17,7 @@ pydantic-settings==2.6.1
 # --- Database ---
 sqlalchemy==2.0.36
 alembic==1.13.3
-psycopg[binary]==3.2.3
+psycopg[binary]==3.3.6
 
 # --- Security ---
 bcrypt==4.2.0
